@@ -30,7 +30,9 @@
           v-for="(space, spaceindex) in sudoku" 
           :key="spaceindex" 
           class="sudoku-item" 
-          @click="gridClick(spaceindex)">
+          @click="gridClick(spaceindex)"
+          :style="{ backgroundColor: selectedSpace === spaceindex ? 'gray' : 'white' }"
+          >
           {{ space }}
         </button>
       </div>
@@ -62,7 +64,7 @@ export default {
       uuid: uuidv4(),
       imageUrl: null,  // 上傳圖片的URL
       selectedFile: null,  // 用於存儲選擇的文件
-      selectedSpace: 1 ,
+      selectedSpace: 0 ,
       number: [1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9],  // 建立一個包含 9 個空字串的陣列
       sudoku: Array(81).fill('')  // 建立一個包含 81 個空字串的陣列
     };
@@ -82,17 +84,18 @@ export default {
         return;
       }
 
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);  // 添加文件
+      formData.append('uid', this.uuid);  // 添加 UUID 或其他參數
+
       // 使用 fetch 或 axios 將文件上傳到服務器
-      axios({
-          method: 'post',
-          url: 'http://localhost:3000/upload',
-          //API要求的資料
-          data: {
-            file: this.selectedFile,
-            uid: this.uuid,
+      axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
-      })
-      .then(response => response.json())
+        }
+      )
+      .then(response => console.log(response))
       .then(data => {
         console.log('上傳成功:', data);
         alert('上傳成功！');
@@ -115,16 +118,19 @@ export default {
 
     // 送到後端解數獨
     solvesudoku() {
+
+      const formData = new FormData();
+      formData.append('map', this.sudoku);  // 添加文件
+      formData.append('uid', this.uuid);  // 添加 UUID 或其他參數
+
       // 使用 fetch 或 axios 將文件上傳到服務器
-      axios({
-          method: 'post',
-          url: 'http://localhost:3000/solve',
-          //API要求的資料
-          data: {
-            sudoku: this.sudoku
+      axios.post('/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
-      })
-      .then(response => response.json())
+        }
+      )
+      .then(response => console.log(response))
       .then(data => {
         console.log('上傳成功:', data);
         alert('上傳成功！');
@@ -229,4 +235,5 @@ export default {
   align-items: center;
   background-color: aqua;
 }
+
 </style>

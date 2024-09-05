@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path')
-
+const multer = require('multer')
 const app = express();
 const PORT = 3000;
 
@@ -13,14 +13,42 @@ const solve = spawn('python', ['sudoku.py', 'arg1', 'arg2']);  // 傳遞參數
 app.use(express.static(path.join(__dirname , '..\\..\\frontend\\sudoku\\dist')));
 
 
+// 配置 multer 存储
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // 确保这个目录存在
+  },
+  filename: function (req, file, cb) {
+    console.log(req)
+    cb(null, req.body.uid + path.extname(file.originalname))
+    // cb(null, req.body.uid)
+  }
+});
+const upload = multer({ storage: storage });
 // router
-app.post("/upload" , function(req , res) {
+app.post("/upload" , upload.single('file') , (req , res) => {
+  // console.log(req)
   if (!req.file) {
-    console.log(req.data)
-    return res.status(400).send('No file uploaded.');
+    return res.status(200).send('accept but no file');
   }
   // 處理完成後返回結果給前端
-  res.json({ message: '文件上傳成功！', file: req });
+  console.log(req.body.uid)
+  
+  // TODO : 要送進python檔裡辨識
+  res.json({ message: '文件上傳成功！'});
+}) ;
+
+
+app.post("/solve" , upload.none , (req , res) => {
+  arrayData = JSON.parse(req.body.map)
+  // console.log(arrayData)
+  if (!req.body.map) {
+    return res.status(200).send('accept but no file');
+  }
+  // 處理完成後返回結果給前端
+  
+  // TODO : 要送進python檔裡辨識
+  res.json({ message: '資料已進來！'});
 }) ;
 
 app.listen(PORT, () => {
