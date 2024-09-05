@@ -12,13 +12,16 @@ const solve = spawn('python', ['sudoku.py', 'arg1', 'arg2']);  // 傳遞參數
 
 app.use(express.static(path.join(__dirname , '..\\..\\frontend\\sudoku\\dist')));
 
-// 創建上傳文件的路由
-app.post('/upload', upload.single('file'), (req, res) => {
-    if (!req.file) {
-      return res.status(400).send('No file uploaded.');
-    }
-    res.json({ message: 'File uploaded successfully!', file: req.file });
-  });
+
+// router
+app.post("/upload" , function(req , res) {
+  if (!req.file) {
+    console.log(req.data)
+    return res.status(400).send('No file uploaded.');
+  }
+  // 處理完成後返回結果給前端
+  res.json({ message: '文件上傳成功！', file: req });
+}) ;
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
