@@ -85,6 +85,7 @@ export default {
       }
 
       const formData = new FormData();
+
       formData.append('file', this.selectedFile);  // 添加文件
       formData.append('uid', this.uuid);  // 添加 UUID 或其他參數
 
@@ -122,6 +123,8 @@ export default {
       const formData = new FormData();
       formData.append('map', this.sudoku);  // 添加文件
       formData.append('uid', this.uuid);  // 添加 UUID 或其他參數
+
+      console.log(formData)
 
       // 使用 fetch 或 axios 將文件上傳到服務器
       axios.post('/upload', formData, {
