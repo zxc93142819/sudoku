@@ -1,5 +1,10 @@
 import sys
-board = sys.argv[1]
+import json
+board = json.loads(sys.argv[1])
+for i in range(9) :
+    for j in range(9) :
+        if(board[i][j] == '') :
+            board[i][j] = 0
 
 def check(i,j,board,num):
     if(num in board[i]):return False
@@ -24,4 +29,9 @@ def rec(board,i,j):
     else:
         return rec(board,i,j+1)
 rec(board,0,0)
-print(board)
+data = []
+for i in range(9) :
+    for j in range(9) :
+        data.append(board[i][j])
+print(str(json.dumps(data)))
+sys.stdout.flush()

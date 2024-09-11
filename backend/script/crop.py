@@ -6,12 +6,13 @@ from PIL import Image
 import time
 import specify
 import sys
+import json
 
-image = sys.argv[1]
+image_path = sys.argv[1]
 
 # Load the new image
 # image_path = './image.jpg'
-# image = cv2.imread(image_path)
+image = cv2.imread(image_path)
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -31,6 +32,7 @@ largest_contour = max(contours, key=cv2.contourArea)
 epsilon = 0.02 * cv2.arcLength(largest_contour, True)
 approx = cv2.approxPolyDP(largest_contour, epsilon, True)
 
+maxHeight , maxWidth , _ = image.shape
 # If the approximated contour has 4 points, assume it is the Sudoku grid
 if len(approx) == 4:
     pts = approx.reshape(4, 2)
@@ -109,4 +111,10 @@ for i in range(grid_size):
     # print(l)
     map.append(l)
 
-print(map)
+# print(map)
+data = []
+for i in range(9) :
+    for j in range(9) :
+        data.append(map[i][j])
+print(str(json.dumps(data)))
+sys.stdout.flush()

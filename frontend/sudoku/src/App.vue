@@ -96,14 +96,20 @@ export default {
           }
         }
       )
-      .then(response => console.log(response))
-      .then(data => {
-        console.log('上傳成功:', data);
-        alert('上傳成功！');
+      .then(response => {
+        console.log(response);
+        var data = response.data.data
+        for(let index = 0 ; index < 81 ; index ++) {
+          if(data[index] == 0) {
+            data[index] = '' ;
+          }
+        }
+        this.sudoku = data;
+        alert('請查看數獨解析是否正確，如有錯請自行更改再按下"看解答"，反之按下"看解答"即可');
       })
       .catch(error => {
-        console.error('上傳失敗:', error);
-        alert('上傳失敗，請重試。');
+        console.error('伺服器錯誤:', error);
+        alert('伺服器錯誤，請重試。');
       });
     },
 
@@ -119,28 +125,24 @@ export default {
 
     // 送到後端解數獨
     solvesudoku() {
-
-      const formData = new FormData();
-      formData.append('map', this.sudoku);  // 添加文件
-      formData.append('uid', this.uuid);  // 添加 UUID 或其他參數
-
-      console.log(formData)
-
       // 使用 fetch 或 axios 將文件上傳到服務器
-      axios.post('/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+      axios.post('/solve', {
+          map: this.sudoku
+      })
+      .then(response => {
+        console.log(response);
+        this.result = response.data.message
+        if(response.data.message == "解決成功") {
+          this.sudoku = response.data.data;
+          alert('已解決此數獨!');
         }
-      )
-      .then(response => console.log(response))
-      .then(data => {
-        console.log('上傳成功:', data);
-        alert('上傳成功！');
+        else {
+          alert('此數獨無解!');
+        }
       })
       .catch(error => {
-        console.error('上傳失敗:', error);
-        alert('上傳失敗，請重試。');
+        console.error('伺服器錯誤:', error);
+        alert('伺服器錯誤，請重試。');
       });
     }
   }

@@ -11,7 +11,7 @@ import time
 import tqdm as tqdm
 from torch.autograd import Variable
 from torchsummary import summary
-import cv2
+import cv2 , os
 from PIL import Image
 
 # print(models.resnet18())
@@ -63,8 +63,8 @@ def recognize(image) :
     netG = ResNetFeatrueExtractor18(pretrained = True)
     netF = ResClassifier()
 
-    netG.load_state_dict(torch.load("./model/netG"))
-    netF.load_state_dict(torch.load("./model/netF"))
+    netG.load_state_dict(torch.load(os.path.join(os.getcwd() , 'backend/model/netG')))
+    netF.load_state_dict(torch.load(os.path.join(os.getcwd() , 'backend/model/netF')))
 
     # summary(netG , (3 , 224 , 224))
 
