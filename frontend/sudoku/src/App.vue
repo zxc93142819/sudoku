@@ -24,7 +24,7 @@
     </div>
 
     <div class="my-4">
-      <h2 style = "text-align: center;">數獨畫面</h2>
+      <!-- <h2 style = "text-align: center;">數獨畫面</h2> -->
       <div class="sudoku-container">
         <button 
           v-for="(space, spaceindex) in sudoku" 
@@ -38,8 +38,12 @@
       </div>
     </div>
 
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <button @click="clear" class="delete_buttom">刪除</button>
+    </div>
+
     <div class="my-4">
-      <h2 style = "text-align: center;">按鈕</h2>
+      <!-- <h2 style = "text-align: center;">按鈕</h2> -->
       <div class="number-container">
         <button 
           v-for="(num, numindex) in number" 
@@ -121,6 +125,11 @@ export default {
     // 數字按下事件
     numberClick(index) {
       this.sudoku[this.selectedSpace] = index + 1 ;
+    },
+
+    // 數字清空事件
+    clear() {
+      this.sudoku[this.selectedSpace] = '' ;
     },
 
     // 送到後端解數獨
@@ -229,12 +238,12 @@ export default {
   align-items: center;
 }
 
-.upload_buttom {
+/* .upload_buttom {
   align-items: center;
   background-color: aqua;
-}
+} */
 
-.solve_buttom {
+.solve_buttom , .upload_buttom , .delete_buttom {
   display: flex;
   justify-content: center;
   align-items: center;
