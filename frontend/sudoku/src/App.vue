@@ -2,7 +2,7 @@
   <div id="app" class="container">
     <!-- 上傳照片按鈕 -->
     <div class="my-4">
-      <h2 style = "text-align: center;">{{uuid}}</h2>
+      <!-- <h2 style = "text-align: center;">{{uuid}}</h2> -->
       <h2 style = "text-align: center;">上傳照片</h2>
       <div class="d-grid gap-2 col-6 mx-auto">
         <input type="file" @change="onFileChange" class="form-control-file"/>
